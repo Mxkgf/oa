@@ -9,6 +9,8 @@
 <body>
     <h1>修改部门</h1>
     <hr/>
+    <h3>欢迎<%=session.getAttribute("username")%></h3>
+    <a href="<%=request.getContextPath()%>/user/exit">exit</a>
     <%
         Dept dept = (Dept) request.getAttribute("dept");
     %>

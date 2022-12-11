@@ -23,6 +23,8 @@
 
   <body>
     <h1 align='center'>部门列表</h1>
+    <h3>欢迎<%=session.getAttribute("username")%></h3>
+    <a href="<%=request.getContextPath()%>/user/exit">exit</a>
     <hr />
     <table border='1'  align='center' width='50%'>
         <tr>

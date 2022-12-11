@@ -8,6 +8,8 @@
   <body>
     <h1>增加部门</h1>
     <hr/>
+    <h3>欢迎<%=session.getAttribute("username")%></h3>
+    <a href="<%=request.getContextPath()%>/user/exit">exit</a>
     <form action='<%=request.getContextPath()%>/dept/save' method='post'>
       <label>部门编号:<input type='text' name='deptno' /></label><br>
       <label>部门名称<input type='text' name='dname' /></label><br>

@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -13,7 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@WebServlet(urlPatterns = {"/user/login"})
+@WebServlet(urlPatterns = {"/user/login", "/user/exit"})
 public class UserServlet extends HttpServlet {
     /**
      * @param request 
@@ -30,7 +31,17 @@ public class UserServlet extends HttpServlet {
         String servletPath = request.getServletPath();
         if ("/user/login".equals(servletPath)) {
             doLogin(request, response);
+        } else if ("/user/exit".equals(servletPath)) {
+            doExit(request, response);
         }
+    }
+
+    private void doExit(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        response.sendRedirect(request.getContextPath());
     }
 
     private void doLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -49,6 +60,8 @@ public class UserServlet extends HttpServlet {
             ps.setString(2, password);
             rs = ps.executeQuery();
             if (rs.next()) {
+                HttpSession session = request.getSession();
+                session.setAttribute("username", username);
                 response.sendRedirect(request.getContextPath() + "/dept/list");
             } else {
                 response.sendRedirect(request.getContextPath() + "/error.jsp");
@@ -58,9 +71,5 @@ public class UserServlet extends HttpServlet {
         } finally {
             DBUtil.close(conn, ps, null);
         }
-//        if (count == 1) {
-//            response.sendRedirect(request.getContextPath() + "/dept/list");
-//            // request.getRequestDispatcher("/dept/list").forward(request, response);
-//        }
     }
 }
